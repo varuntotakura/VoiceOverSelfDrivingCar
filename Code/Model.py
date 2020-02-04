@@ -13,11 +13,12 @@ import tensorflow as tf
 from tensorflow import keras
 import time
 import os
+import matplotlib.pyplot as plt
 
 # Import th data
 Data = '../Data/data.npy'
-data = np.load(Data)
-Name = '../Voice-Over-Self-Driving-Convolutional-Network'
+data = np.load(Data, allow_pickle=True)
+Name = '../Code/TrainedModel/Voice-Over-Self-Driving-Convolutional-Network'
 tensorboard = keras.callbacks.TensorBoard(log_dir='logs/{}'.format(Name))
 
 # Declare the required arrays
@@ -75,9 +76,6 @@ model = keras.Sequential([
     keras.layers.Dense(512, activation=tf.nn.relu),
     keras.layers.Dense(128, activation=tf.nn.relu),
     keras.layers.Dense(128, activation=tf.nn.relu),
-    keras.layers.Dense(512, activation=tf.nn.relu),
-    keras.layers.Dense(128, activation=tf.nn.relu),
-    keras.layers.Dense(128, activation=tf.nn.relu),
     keras.layers.Dense(len(class_names), activation=tf.nn.softmax)
 ])
 
@@ -100,7 +98,7 @@ model.summary()
 test_loss, test_acc = model.evaluate(test_images, test_labels)
 
 # Print Test accuracy
-print('Test accuracy:', test_acc)
+print('Test accuracy:', test_acc*100, '%')
 
 # Make Predictions
 predictions = model.predict([test_images])[0] 
